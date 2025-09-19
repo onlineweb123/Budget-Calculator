@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ta">
 <head>
   <meta charset="UTF-8">
@@ -26,7 +27,6 @@
       padding: 10px;
     }
 
-    /* ✅ Add Input + Button Section */
     .add-box {
       margin: 20px auto;
       max-width: 90%;
@@ -76,7 +76,7 @@
       padding: 8px;
       border-bottom: 1px solid #eee;
       font-size: 15px;
-      word-break: break-word; /* ✅ Long text wrap */
+      word-break: break-word;
     }
 
     .remove-btn {
@@ -93,7 +93,6 @@
       flex-shrink: 0;
     }
 
-    /* ✅ Floating Calculator Button */
     #calcButton {
       position: fixed;
       bottom: 100px;
@@ -115,7 +114,6 @@
       height: 28px;
     }
 
-    /* ✅ Small Floating Calculator */
     #calculator {
       position: fixed;
       bottom: 180px;
@@ -158,6 +156,28 @@
     .calc-buttons button:hover {
       background: #023e8a;
     }
+
+    /* ✅ Last row style */
+    .calc-bottom {
+      display: flex;
+      gap: 5px;
+      margin-top: 5px;
+    }
+
+    .calc-bottom button {
+      flex: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #fff;
+    }
+
+    .btn-clear { background: #ff4d4d; }
+    .btn-back  { background: #f39c12; }
+    .btn-clear:hover { background: #cc0000; }
+    .btn-back:hover  { background: #e67e22; }
   </style>
 </head>
 <body>
@@ -167,42 +187,41 @@
     <p> Money Monitor </p>
   </header>
 
-  <!-- ✅ Input Box + Add Button -->
   <div class="add-box">
     <input type="text" id="itemInput" placeholder="உங்கள் செலவை எழுதுங்கள்...">
     <button onclick="addItem()">Add</button>
   </div>
 
-  <!-- ✅ List Container -->
   <div class="list-container" id="listContainer">
     <p style="color:#777;"> என்னுடைய List 👇</p>
   </div>
   
   <br><br><br><br><br><br><br><br><br><br><br><br><br>
-
+  
   <footer>
     <p>&copy; 2025 Mathavan . All rights reserved.</p>
   </footer>
 
-  <!-- ✅ Floating Calculator Button -->
   <div id="calcButton">
     <img src="https://img.icons8.com/ios-filled/50/ffffff/calculator.png" alt="Calculator">
   </div>
 
-  <!-- ✅ Small Calculator Box -->
   <div id="calculator">
     <input type="text" id="calcScreen" disabled>
     <div class="calc-buttons">
-      <button>7</button><button>8</button><button>9</button><button>/</button>
-      <button>4</button><button>5</button><button>6</button><button>*</button>
+      <button>7</button><button>8</button><button>9</button><button>÷</button>
+      <button>4</button><button>5</button><button>6</button><button>×</button>
       <button>1</button><button>2</button><button>3</button><button>-</button>
       <button>0</button><button>.</button><button>=</button><button>+</button>
-      <button style="grid-column: span 4; background:#ff4d4d;">C</button>
+    </div>
+    <!-- ✅ Split Clear + Backspace row -->
+    <div class="calc-bottom">
+      <button class="btn-clear">C</button>
+      <button class="btn-back">⌫</button>
     </div>
   </div>
 
   <script>
-    // ✅ Add Item to List with Remove Button
     function addItem() {
       const input = document.getElementById("itemInput");
       const list = document.getElementById("listContainer");
@@ -227,27 +246,25 @@
       }
     }
 
-    // ✅ Calculator Toggle
     const button = document.getElementById("calcButton");
     const calculator = document.getElementById("calculator");
     const screen = document.getElementById("calcScreen");
     const calcButtons = document.querySelectorAll(".calc-buttons button");
+    const clearBtn = document.querySelector(".btn-clear");
+    const backBtn = document.querySelector(".btn-back");
 
     button.addEventListener("click", () => {
       calculator.style.display = calculator.style.display === "block" ? "none" : "block";
     });
 
-    // ✅ Calculator Logic
     let expression = "";
     calcButtons.forEach(btn => {
       btn.addEventListener("click", () => {
-        const value = btn.textContent;
-        if (value === "C") {
-          expression = "";
-          screen.value = "";
-        } else if (value === "=") {
+        let value = btn.textContent;
+        if (value === "=") {
           try {
-            expression = eval(expression).toString();
+            let safeExpression = expression.replace(/×/g, "*").replace(/÷/g, "/");
+            expression = eval(safeExpression).toString();
             screen.value = expression;
           } catch {
             screen.value = "Error";
@@ -260,7 +277,18 @@
       });
     });
 
-    // ✅ Drag Function (for both calculator & button)
+    // ✅ Clear Button
+    clearBtn.addEventListener("click", () => {
+      expression = "";
+      screen.value = "";
+    });
+
+    // ✅ Backspace Button
+    backBtn.addEventListener("click", () => {
+      expression = expression.slice(0, -1);
+      screen.value = expression;
+    });
+
     function makeDraggable(el) {
       let isDragging = false;
       let currentX = 0, currentY = 0, initialX, initialY, xOffset = 0, yOffset = 0;
@@ -296,7 +324,6 @@
       }
     }
 
-    // ✅ Apply draggable to both
     makeDraggable(calculator);
     makeDraggable(document.getElementById("calcButton"));
   </script>
