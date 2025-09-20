@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ta">
 <head>
   <meta charset="UTF-8">
   <title>Budget Calculator</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  
+    
   <style>
     body {
       margin: 0;
@@ -59,7 +60,7 @@
 
     .list-container {
       max-width: 90%;
-      margin: 0 auto 30px auto;
+      margin: 0 auto 15px auto;
       background: #fff;
       padding: 15px;
       border-radius: 10px;
@@ -90,6 +91,22 @@
       text-align: center;
       cursor: pointer;
       flex-shrink: 0;
+    }
+
+    #downloadBtn {
+      display: block;
+      margin: 0 auto 30px auto;
+      padding: 10px 14px;
+      border: none;
+      border-radius: 6px;
+      background-color: #00aaf3;
+      color: white;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    #downloadBtn:hover {
+      background-color: #0055f3;
     }
 
     #calcButton {
@@ -156,7 +173,6 @@
       background: #023e8a;
     }
 
-    /* ✅ Last row style */
     .calc-bottom {
       display: flex;
       gap: 5px;
@@ -194,9 +210,14 @@
   <div class="list-container" id="listContainer">
     <p style="color:#777;"> என்னுடைய List 👇</p>
   </div>
-  
-  <br><br><br><br><br><br><br><br><br><br><br><br><br>
-  
+
+  <!-- ✅ Download Button -->
+  <button id="downloadBtn">📸 Download List as Image</button>
+
+
+ <br><br><br><br><br><br><br><br><br><br><br>
+
+
   <footer>
     <p>&copy; 2025 Mathavan . All rights reserved.</p>
   </footer>
@@ -213,12 +234,14 @@
       <button>1</button><button>2</button><button>3</button><button>-</button>
       <button>0</button><button>.</button><button>=</button><button>+</button>
     </div>
-    <!-- ✅ Split Clear + Backspace row -->
     <div class="calc-bottom">
       <button class="btn-clear">C</button>
       <button class="btn-back">⌫</button>
     </div>
   </div>
+
+  <!-- ✅ html2canvas library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
     function addItem() {
@@ -276,13 +299,11 @@
       });
     });
 
-    // ✅ Clear Button
     clearBtn.addEventListener("click", () => {
       expression = "";
       screen.value = "";
     });
 
-    // ✅ Backspace Button
     backBtn.addEventListener("click", () => {
       expression = expression.slice(0, -1);
       screen.value = expression;
@@ -325,6 +346,17 @@
 
     makeDraggable(calculator);
     makeDraggable(document.getElementById("calcButton"));
+
+    // ✅ Download List as Image
+    document.getElementById("downloadBtn").addEventListener("click", () => {
+      const listContainer = document.getElementById("listContainer");
+      html2canvas(listContainer).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "My_List.png";
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
   </script>
 
 </body>
