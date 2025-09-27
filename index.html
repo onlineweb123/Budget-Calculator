@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ta">
 <head>
   <meta charset="UTF-8">
@@ -142,13 +143,20 @@
       z-index: 2000;
     }
 
-    #calculator input {
+    #calcScreen {
       width: 100%;
+      min-height: 40px;
+      max-height: 100px;
       padding: 5px;
       margin-bottom: 8px;
       text-align: right;
       font-size: 16px;
       box-sizing: border-box;
+      resize: none;
+      overflow-y: auto;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
+      word-break: break-word;
     }
 
     .calc-buttons {
@@ -210,12 +218,10 @@
     <p style="color:#777;"> என்னுடைய List 👇</p>
   </div>
 
-  <!-- ✅ Download Button -->
   <button id="downloadBtn">📸 Download List as Image</button>
-
-
- <br><br><br><br><br><br><br><br><br><br><br>
-
+  
+  <br><br><br><br><br><br><br><br><br><br>
+  
 
   <footer>
     <p>&copy; 2025 Mathavan . All rights reserved.</p>
@@ -226,7 +232,7 @@
   </div>
 
   <div id="calculator">
-    <input type="text" id="calcScreen" disabled>
+    <textarea id="calcScreen" readonly></textarea>
     <div class="calc-buttons">
       <button>7</button><button>8</button><button>9</button><button>÷</button>
       <button>4</button><button>5</button><button>6</button><button>×</button>
@@ -239,7 +245,6 @@
     </div>
   </div>
 
-  <!-- ✅ html2canvas library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
   <script>
@@ -287,6 +292,7 @@
             let safeExpression = expression.replace(/×/g, "*").replace(/÷/g, "/");
             expression = eval(safeExpression).toString();
             screen.value = expression;
+            screen.scrollTop = screen.scrollHeight;
           } catch {
             screen.value = "Error";
             expression = "";
@@ -294,6 +300,7 @@
         } else {
           expression += value;
           screen.value = expression;
+          screen.scrollTop = screen.scrollHeight;
         }
       });
     });
@@ -306,6 +313,7 @@
     backBtn.addEventListener("click", () => {
       expression = expression.slice(0, -1);
       screen.value = expression;
+      screen.scrollTop = screen.scrollHeight;
     });
 
     function makeDraggable(el) {
@@ -321,6 +329,8 @@
       el.addEventListener("touchmove", drag, { passive: false });
 
       function dragStart(e) {
+        // ✅ calcScreen-ல் drag ஆரம்பிக்கக் கூடாது
+        if (e.target.id === "calcScreen") return;
         isDragging = true;
         initialX = e.type === "touchstart" ? e.touches[0].clientX - xOffset : e.clientX - xOffset;
         initialY = e.type === "touchstart" ? e.touches[0].clientY - yOffset : e.clientY - yOffset;
@@ -346,7 +356,6 @@
     makeDraggable(calculator);
     makeDraggable(document.getElementById("calcButton"));
 
-    // ✅ Download List as Image
     document.getElementById("downloadBtn").addEventListener("click", () => {
       const listContainer = document.getElementById("listContainer");
       html2canvas(listContainer).then(canvas => {
