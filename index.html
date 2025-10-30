@@ -1,11 +1,26 @@
 <!DOCTYPE html>
-<html lang="ta">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Budget Calculator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <title>Budget Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="./manifest.json">
+    <link rel='stylesheet' href='./style.css'>
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <script>
+        if('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./service-worker.js');
+        };
+    </script>
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="PWA Example">
+    <link rel="apple-touch-icon" href="icon-152x152.png">
+    <meta name="msapplication-TileImage" content="icon-144x144.png">
+    <meta name="msapplication-TileColor" content="#ffffff">
     
-  <style>
+     <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -200,9 +215,11 @@
     .btn-clear:hover { background: #cc0000; }
     .btn-back:hover  { background: #e67e22; }
   </style>
+    
+    
 </head>
 <body>
-
+   
   <header>
     <h1> Budget Calculator </h1>
     <p> Money Monitor </p>
@@ -218,9 +235,9 @@
   </div>
 
   <button id="downloadBtn">📸 Download List as Image</button>
-  
+
   <br><br><br><br><br><br><br><br><br><br>
-  
+
 
   <footer>
     <p>&copy; 2025 Mathavan . All rights reserved.</p>
@@ -365,6 +382,5 @@
       });
     });
   </script>
-
 </body>
 </html>
